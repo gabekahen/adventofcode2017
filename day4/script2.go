@@ -532,20 +532,24 @@ func main() {
 			word := words[0]
 			words = words[1:]
 
+			// Break loop, mark line as invalid
 			if contains(words, word) {
 				valid = false
 				break
 			}
 		}
 
+		// Increment valid lines counter
 		if valid {
 			validLines++
 		}
+		// Always increment lines counter
 		lines++
 	}
 	fmt.Printf("There are %d/%d valid lines.\n", validLines, lines)
 }
 
+// Checks the return value of checksum(word) against all words in list.
 func contains(list []string, word string) bool {
 	for _, lword := range list {
 		if checksum(lword) == checksum(word) {
@@ -554,7 +558,7 @@ func contains(list []string, word string) bool {
 	}
 	return false
 }
-
+// Returns the product of all the letters in a word, mapped to prime numbers.
 func checksum(word string) int {
 	var product = 1
 	letters := map[string]int{
