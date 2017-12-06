@@ -27,3 +27,4 @@ while history.uniq.length == history.length
 end
 
 printf("Cycles: %d\n", cycles)
+printf("Loop size: %d\n", (history.length - 1) - history.index(history.last))
