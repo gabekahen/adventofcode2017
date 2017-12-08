@@ -16,10 +16,16 @@ class Hash
     conditional = self[comp_reg].send(comp_operation, comp_amount.to_i)
     self[register] += amount.to_i if operation == 'inc' && conditional
     self[register] -= amount.to_i if operation == 'dec' && conditional
+    self.map { |_, v| v }.max # return the current maximum value of the registry
   end
 end
 
 registry = Hash.new(0)
-instructions.each_line { |line| registry.instruction(line) }
+max_value = 0
+instructions.each_line do |line|
+  value = registry.instruction(line)
+  max_value = value if value > max_value
+end
 
-print registry.map { |_, v| v }.max
+printf("Max value (current): %d\n", registry.map { |_, v| v }.max)
+printf("Max value (alltime): %d\n", max_value)
