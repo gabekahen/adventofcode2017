@@ -30,3 +30,26 @@ RSpec.describe '#reverse_subset' do
     expect(data).to eq([9, 8, 2, 3, 4, 5, 6, 7, 1, 0, 10])
   end
 end
+
+RSpec.describe '#dense_hash' do
+  it 'hash empty string' do
+    lengths = [17, 31, 73, 47, 23]
+    sparse_hash = knot((0..255).to_a, lengths, 64)
+    expect(dense_hash(sparse_hash)).to eq('a2582a3a0e66e6e86e3812dcb672a272')
+  end
+  it 'AoC 2017' do
+    lengths = 'AoC 2017'.bytes + [17, 31, 73, 47, 23]
+    sparse_hash = knot((0..255).to_a, lengths, 64)
+    expect(dense_hash(sparse_hash)).to eq('33efeb34ea91902bb2f59c9920caa6cd')
+  end
+  it '1,2,3' do
+    lengths = '1,2,3'.bytes + [17, 31, 73, 47, 23]
+    sparse_hash = knot((0..255).to_a, lengths, 64)
+    expect(dense_hash(sparse_hash)).to eq('3efbe78a8d82f29979031a4aa0b16a9d')
+  end
+  it '1,2,4' do
+    lengths = '1,2,4'.bytes + [17, 31, 73, 47, 23]
+    sparse_hash = knot((0..255).to_a, lengths, 64)
+    expect(dense_hash(sparse_hash)).to eq('63960835bcdc130f0b66d7ff4f6a5a8e')
+  end
+end
