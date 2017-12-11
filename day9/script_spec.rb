@@ -14,7 +14,7 @@ RSpec.describe '#score' do
 
   data.each do |k, v|
     it k do
-      expect(score(k)).to eq(v)
+      expect(score(k).score).to eq(v)
     end
   end
 end

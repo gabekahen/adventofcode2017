@@ -2,8 +2,17 @@
 
 data = File.read('./data').chomp!
 
+# Results class stores results from score function
+class Results
+  attr_accessor :score, :garbage
+  def initialize
+    @score = 0
+    @garbage = 0
+  end
+end
+
 def score(data)
-  score = 0
+  results = Results.new
   depth = 1
   garbage = false
   canceled = false
@@ -23,14 +32,14 @@ def score(data)
     when '>'
       garbage = false
     when '{'
-      score += depth unless garbage
+      results.score += depth unless garbage
       depth += 1 unless garbage
     when '}'
       depth -= 1 unless garbage
     end
   end
 
-  score
+  results
 end
 
-printf("Score: %d\n", score(data))
+printf("Score: %s\n", score(data).score)
