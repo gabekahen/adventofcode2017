@@ -28,18 +28,25 @@ def score(data)
     when '!'
       canceled = true
     when '<'
+      results.garbage += 1 if garbage
       garbage = true
     when '>'
       garbage = false
     when '{'
+      results.garbage += 1 if garbage
       results.score += depth unless garbage
       depth += 1 unless garbage
     when '}'
+      results.garbage += 1 if garbage
       depth -= 1 unless garbage
+    else
+      results.garbage += 1 if garbage
     end
   end
 
   results
 end
 
-printf("Score: %s\n", score(data).score)
+result = score(data)
+
+printf("Score: %d\nGarbage: %d\n", result.score, result.garbage)

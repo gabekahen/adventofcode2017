@@ -2,7 +2,7 @@
 
 require './script'
 
-RSpec.describe '#score' do
+RSpec.describe '#score count' do
   data = {  '{}' => 1,
             '{{{}}}' => 6,
             '{{},{}}' => 5,
@@ -15,6 +15,22 @@ RSpec.describe '#score' do
   data.each do |k, v|
     it k do
       expect(score(k).score).to eq(v)
+    end
+  end
+end
+
+RSpec.describe '#score garbage' do
+  data = {  '<>' => 0,
+            '<random characters>' => 17,
+            '<<<<>' => 3,
+            '<{!>}>' => 2,
+            '<!!>' => 0,
+            '<!!!>>' => 0,
+            '<{o"i!a,<{i<a>' => 10 }
+
+  data.each do |k, v|
+    it k do
+      expect(score(k).garbage).to eq(v)
     end
   end
 end
