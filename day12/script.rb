@@ -22,7 +22,15 @@ def in_group(data_hash, group_list, pid)
 end
 
 data_hash = parse_input(data)
-group_list = []
 
-in_group(data_hash, group_list, 0)
-printf("Number of nodes connected to '0': %d\n", group_list.length)
+groups = 0
+
+until data_hash.empty?
+  group_list = []
+  first_key = data_hash.keys[0]
+  in_group(data_hash, group_list, first_key)
+  printf("Number of nodes connected to '%d': %d\n", first_key, group_list.length)
+  group_list.each { |k| data_hash.delete(k) }
+  groups += 1
+end
+printf("Number of groups: %d\n", groups)
