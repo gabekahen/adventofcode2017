@@ -2,6 +2,7 @@
 
 # Wall class with helper functions to determine scanner placement
 class Wall
+  attr_accessor :range, :scanner
   def initialize(range, i = 0)
     @range = range
     @scanner = i
@@ -18,17 +19,6 @@ class Wall
   def severity(depth)
     depth * @range
   end
-
-  def print(depth)
-    printf('%-5d: %-6d : ', depth, depth * @range)
-    (0..@range).each do |i|
-      if i == @scanner
-        printf('[S] ')
-      else printf('[ ] ')
-      end
-    end
-    printf("\n")
-  end
 end
 
 def parse_input(data)
@@ -41,6 +31,10 @@ def parse_input(data)
 end
 
 data = File.read('./data')
+# data = '0: 3
+# 1: 2
+# 4: 4
+# 6: 4'
 
 firewall = parse_input(data)
 
@@ -48,10 +42,29 @@ severity = 0
 
 (0..firewall.keys.last).each do |step|
   wall = firewall[step]
-  wall.print(step) unless wall.nil?
-  printf("%-5d\n", step) if wall.nil?
+  # wall.print(step) unless wall.nil?
+  # printf("%-5d\n", step) if wall.nil?
   severity += wall.severity(step) if !wall.nil? && wall.blocked?
   firewall.each_value(&:next!)
 end
 
-printf("Severity: %d\n", severity)
+printf("(Part 1) Severity: %d\n", severity)
+
+delay = 2
+
+loop do
+  blocked = false
+  firewall_copy = parse_input(data)
+  delay.times { firewall_copy.each_value(&:next!) }
+
+  (0..firewall_copy.keys.last).each do |step|
+    wall = firewall_copy[step]
+    blocked = true if !wall.nil? && wall.blocked?
+    break if blocked
+    firewall_copy.each_value(&:next!)
+  end
+  delay += 4 if blocked
+  break unless blocked
+end
+
+printf("(Part 2) Delay: %d\n", delay)
