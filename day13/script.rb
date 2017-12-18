@@ -16,6 +16,10 @@ class Wall
     @scanner == i
   end
 
+  def blocked_in?(steps = 0)
+    steps % (@range * 2 - 2) == 0
+  end
+
   def severity(depth)
     depth * @range
   end
@@ -31,10 +35,6 @@ def parse_input(data)
 end
 
 data = File.read('./data')
-# data = '0: 3
-# 1: 2
-# 4: 4
-# 6: 4'
 
 firewall = parse_input(data)
 
@@ -42,28 +42,26 @@ severity = 0
 
 (0..firewall.keys.last).each do |step|
   wall = firewall[step]
-  # wall.print(step) unless wall.nil?
-  # printf("%-5d\n", step) if wall.nil?
   severity += wall.severity(step) if !wall.nil? && wall.blocked?
   firewall.each_value(&:next!)
 end
 
 printf("(Part 1) Severity: %d\n", severity)
 
-delay = 2
+delay = 0
+blocked = true
 
+# Every loop, check if we're blocked at (depth + delay).
+# IF we're blocked, increment the delay & restart the loop.
 loop do
-  blocked = false
-  firewall_copy = parse_input(data)
-  delay.times { firewall_copy.each_value(&:next!) }
-
-  (0..firewall_copy.keys.last).each do |step|
-    wall = firewall_copy[step]
-    blocked = true if !wall.nil? && wall.blocked?
-    break if blocked
-    firewall_copy.each_value(&:next!)
+  firewall.each_key do |depth|
+    if firewall[depth].blocked_in?(depth + delay)
+      delay += 1
+      blocked = true
+      break
+    end
+    blocked = false
   end
-  delay += 4 if blocked
   break unless blocked
 end
 
